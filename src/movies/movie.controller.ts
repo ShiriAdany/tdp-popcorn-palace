@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { Movie } from './movie.entity';
+import { CreateMovieDto } from './dto/create-movie.dto';  // Import the DTO
 
 @Controller('movies')
 export class MovieController {
@@ -8,9 +9,7 @@ export class MovieController {
 
   // HTTP POST endpoint to add a new movie
   @Post()
-  async addMovie(@Body() movieData: Partial<Movie>): Promise<Movie> {
+  async addMovie(@Body() movieData: CreateMovieDto): Promise<Movie> {
     return this.movieService.addMovie(movieData);  
   }
-
-  
 }
