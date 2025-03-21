@@ -12,4 +12,11 @@ export class MovieController {
   async addMovie(@Body() movieData: CreateMovieDto): Promise<Movie> {
     return this.movieService.addMovie(movieData);  
   }
+
+  // HTTP GET endpoint to fetch all movies
+  @Get('all')
+  async getAllMovies(): Promise<Movie[]>{
+    return this.movieService.getAllMovies();
+  }
+
 }

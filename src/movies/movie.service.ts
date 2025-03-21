@@ -15,4 +15,9 @@ export class MovieService {
   async addMovie(movieData: CreateMovieDto): Promise<Movie> {
     return this.movieRepository.save(movieData);  
   }
+
+  // Fetch all movies
+  async getAllMovies(): Promise<Movie[]> {
+    return this.movieRepository.find();
+  }
 }

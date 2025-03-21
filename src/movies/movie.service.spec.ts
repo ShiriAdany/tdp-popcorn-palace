@@ -164,4 +164,32 @@ describe('MovieService', () => {
       expect(errors[0].constraints.max).toBeDefined(); // Check for max constraint
     });
   });
+
+  it('should return all movies', async () => {
+    const movies: Movie[] = [
+      {
+        id: 1,
+        title: 'Toy Story',
+        genre: 'Animation',
+        duration: 81,
+        rating: 8.3,
+        release_year: 1995,
+      },
+      {
+        id: 2,
+        title: 'Titanic',
+        genre: 'Romance',
+        duration: 195,
+        rating: 7.8,
+        release_year: 1997,
+      },
+    ];
+  
+    jest.spyOn(repository, 'find').mockResolvedValue(movies);
+  
+    const result = await service.getAllMovies();
+    expect(repository.find).toHaveBeenCalled();
+    expect(result).toEqual(movies);
+  });
+  
 });
