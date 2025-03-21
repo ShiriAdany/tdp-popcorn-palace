@@ -43,5 +43,15 @@ export class MovieService {
     await this.movieRepository.save(movie);
 
   }
+
+  // Delete a movie
+  async deleteMovie(title: string) : Promise<void>{
+    const movie = await this.movieRepository.findOne({where: {title}});
+
+    if (!movie){
+      throw new NotFoundException(`Movie with title "${title}" not found`)
+    }
+    await this.movieRepository.remove(movie);
+  }
   
 }

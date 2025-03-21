@@ -22,9 +22,16 @@ export class MovieController {
     return this.movieService.addMovie(movieData);  
   }
 
+  // HTTP POST endpoint to update a movie by title
   @Post('update/:title')
   async updateMovie(@Param('title') title: string, @Body() updateData: UpdateMovieDto): Promise<void> {
     await this.movieService.updateMovie(title, updateData);
+  }
+
+  //HTTP DELETE endpoint to delete a movie by title
+  @Delete(':title')
+  async deleteMovie(@Param('title') title: string): Promise<void> {
+    await this.movieService.deleteMovie(title);
   }
 
 

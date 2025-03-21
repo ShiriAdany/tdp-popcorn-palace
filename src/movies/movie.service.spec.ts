@@ -358,6 +358,34 @@ describe('MovieService', () => {
       expect(errors[0].constraints.max).toBeDefined(); 
     });
   });
+
+
+  it('should delete a movie successfully', async () => {
+    const title = 'Mulan';
+    const existingMovie = new Movie();
+    existingMovie.title = title;
+
+    // Mock findOne to return the existing movie
+    jest.spyOn(repository, 'findOne').mockResolvedValue(existingMovie);
+    // Mock remove to resolve successfully
+    jest.spyOn(repository, 'remove').mockResolvedValue(undefined);
+
+    await service.deleteMovie(title);
+
+    expect(repository.remove).toHaveBeenCalledWith(existingMovie);
+  });
+
+  it('should throw NotFoundException if movie is not found', async () => {
+    const title = 'Mulan';
+
+    // Mock findOne to return null (movie not found)
+    jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+
+    await expect(service.deleteMovie(title)).rejects.toThrow(NotFoundException);
+    await expect(service.deleteMovie(title)).rejects.toThrow(
+      `Movie with title "${title}" not found`
+    );
+  });
   
   
 });
