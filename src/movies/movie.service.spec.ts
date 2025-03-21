@@ -378,7 +378,6 @@ describe('MovieService', () => {
   it('should throw NotFoundException if movie is not found', async () => {
     const title = 'Mulan';
 
-    // Mock findOne to return null (movie not found)
     jest.spyOn(repository, 'findOne').mockResolvedValue(null);
 
     await expect(service.deleteMovie(title)).rejects.toThrow(NotFoundException);
