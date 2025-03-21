@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column,Unique } from 'typeorm';
 
 @Entity()
+@Unique(['title'])  // Movie title is unique
 export class Movie {
   @PrimaryGeneratedColumn()
   id: number;
