@@ -1,6 +1,4 @@
-//requires the following fields to be non-optional
-
-import { IsString, IsInt, IsEnum, IsNumber,IsPositive, Min, Max, MinLength, MaxLength} from 'class-validator';
+import { IsString, IsInt, IsEnum, IsNumber, IsPositive, Min, Max, MinLength, MaxLength } from 'class-validator';
 
 export class CreateMovieDto {
   @IsString()
@@ -36,5 +34,5 @@ export class CreateMovieDto {
   @IsInt()
   @Min(1888)  // The first movie was released in 1888
   @Max(new Date().getFullYear())  // Ensures the year is valid- not greater than the current year
-  release_year: number;
+  releaseYear: number;
 }

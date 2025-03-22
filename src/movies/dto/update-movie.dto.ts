@@ -33,5 +33,5 @@ export class UpdateMovieDto {
   @IsInt()
   @Min(1888)
   @Max(new Date().getFullYear())
-  release_year?: number;
+  releaseYear?: number;
 }

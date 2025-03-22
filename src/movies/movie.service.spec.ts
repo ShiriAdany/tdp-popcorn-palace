@@ -51,7 +51,7 @@ describe('MovieService', () => {
         genre: 'Animation',
         duration: 81,
         rating: 8.3,
-        release_year: 1995,
+        releaseYear: 1995,
       },
       {
         id: 2,
@@ -59,7 +59,7 @@ describe('MovieService', () => {
         genre: 'Romance',
         duration: 195,
         rating: 7.8,
-        release_year: 1997,
+        releaseYear: 1997,
       },
     ];
   
@@ -75,7 +75,7 @@ describe('MovieService', () => {
       id: 1,
       title: 'Toy Story',
       genre: 'Animation',
-      release_year: 1995,
+      releaseYear: 1995,
       duration: 81,
       rating: 8.3,
     };
@@ -84,7 +84,7 @@ describe('MovieService', () => {
       id: 2,
       title: 'Toy Story',
       genre: 'Animation',
-      release_year: 1995,
+      releaseYear: 1995,
       duration: 81,
       rating: 8.3,
     };
@@ -99,7 +99,7 @@ describe('MovieService', () => {
       id: 2,
       title: 'The Lion King',
       genre: 'Animation',
-      release_year: 1994,
+      releaseYear: 1994,
       duration: 88,
       rating: 8.5,
     };
@@ -121,7 +121,7 @@ describe('MovieService', () => {
       validMovie.genre = 'Sci-Fi';
       validMovie.duration = 148;
       validMovie.rating = 8.8;
-      validMovie.release_year = 2010;
+      validMovie.releaseYear = 2010;
 
       const errors = await validate(validMovie);
       expect(errors.length).toBe(0); 
@@ -133,7 +133,7 @@ describe('MovieService', () => {
       invalidMovie.genre = 'Sci-Fi';
       invalidMovie.duration = 148;
       invalidMovie.rating = 8.8;
-      invalidMovie.release_year = 2010;
+      invalidMovie.releaseYear = 2010;
 
       const errors = await validate(invalidMovie);
       expect(errors.length).toBeGreaterThan(0); 
@@ -146,7 +146,7 @@ describe('MovieService', () => {
       invalidMovie.genre = 'Sci-Fi';
       invalidMovie.duration = 148;
       invalidMovie.rating = 8.8;
-      invalidMovie.release_year = 2010;
+      invalidMovie.releaseYear = 2010;
 
       const errors = await validate(invalidMovie);
       expect(errors.length).toBeGreaterThan(0); 
@@ -159,7 +159,7 @@ describe('MovieService', () => {
       invalidMovie.genre = 'InvalidGenre'; // Invalid: Genre not in enum
       invalidMovie.duration = 148;
       invalidMovie.rating = 8.8;
-      invalidMovie.release_year = 2010;
+      invalidMovie.releaseYear = 2010;
 
       const errors = await validate(invalidMovie);
       expect(errors.length).toBeGreaterThan(0); 
@@ -172,7 +172,7 @@ describe('MovieService', () => {
       invalidMovie.genre = 'Sci-Fi';
       invalidMovie.duration = -148; // Invalid: Negative duration
       invalidMovie.rating = 8.8;
-      invalidMovie.release_year = 2010;
+      invalidMovie.releaseYear = 2010;
 
       const errors = await validate(invalidMovie);
       expect(errors.length).toBeGreaterThan(0); 
@@ -185,33 +185,33 @@ describe('MovieService', () => {
       invalidMovie.genre = 'Sci-Fi';
       invalidMovie.duration = 148;
       invalidMovie.rating = 11; // Invalid: Rating exceeds max value
-      invalidMovie.release_year = 2010;
+      invalidMovie.releaseYear = 2010;
 
       const errors = await validate(invalidMovie);
       expect(errors.length).toBeGreaterThan(0); 
       expect(errors[0].constraints.max).toBeDefined(); // Check for max constraint
     });
 
-    it('should fail validation if release_year is too early', async () => {
+    it('should fail validation if releaseYear is too early', async () => {
       const invalidMovie = new CreateMovieDto();
       invalidMovie.title = 'Inception';
       invalidMovie.genre = 'Sci-Fi';
       invalidMovie.duration = 148;
       invalidMovie.rating = 8.8;
-      invalidMovie.release_year = 1887; // Invalid: Year before 1888
+      invalidMovie.releaseYear = 1887; // Invalid: Year before 1888
 
       const errors = await validate(invalidMovie);
       expect(errors.length).toBeGreaterThan(0); 
       expect(errors[0].constraints.min).toBeDefined(); // Check for min constraint
     });
 
-    it('should fail validation if release_year is in the future', async () => {
+    it('should fail validation if releaseYear is in the future', async () => {
       const invalidMovie = new CreateMovieDto();
       invalidMovie.title = 'Inception';
       invalidMovie.genre = 'Sci-Fi';
       invalidMovie.duration = 148;
       invalidMovie.rating = 8.8;
-      invalidMovie.release_year = new Date().getFullYear() + 1; // Invalid: Year in the future
+      invalidMovie.releaseYear = new Date().getFullYear() + 1; // Invalid: Year in the future
 
       const errors = await validate(invalidMovie);
       expect(errors.length).toBeGreaterThan(0); 
@@ -226,7 +226,7 @@ describe('MovieService', () => {
     existingMovie.genre = 'Animation';
     existingMovie.duration = 88;
     existingMovie.rating = 7.6;
-    existingMovie.release_year = 1998;
+    existingMovie.releaseYear = 1998;
 
     const updateData: UpdateMovieDto = {
       genre: 'Action',
@@ -266,7 +266,7 @@ describe('MovieService', () => {
     existingMovie.genre = 'Animation';
     existingMovie.duration = 88;
     existingMovie.rating = 7.6;
-    existingMovie.release_year = 1998;
+    existingMovie.releaseYear = 1998;
 
     const updateData: UpdateMovieDto = {
       genre: 'Drama',
@@ -282,7 +282,7 @@ describe('MovieService', () => {
       genre: 'Drama', // Genre should be updated
       duration: 88, // Duration should remain the same (not in update data)
       rating: 7.6, // Rating should remain the same (not in update data)
-      release_year: 1998, // Release year should remain the same (not in update data)
+      releaseYear: 1998, // Release year should remain the same (not in update data)
     }));
   });
   
@@ -292,7 +292,7 @@ describe('MovieService', () => {
       validMovie.genre = 'Sci-Fi';
       validMovie.duration = 148;
       validMovie.rating = 8.8;
-      validMovie.release_year = 2010;
+      validMovie.releaseYear = 2010;
   
       const errors = await validate(validMovie);
       expect(errors.length).toBe(0); // Should pass validation
@@ -303,7 +303,7 @@ describe('MovieService', () => {
       invalidMovie.genre = 'InvalidGenre'; // Invalid genre
       invalidMovie.duration = 148;
       invalidMovie.rating = 8.8;
-      invalidMovie.release_year = 2010;
+      invalidMovie.releaseYear = 2010;
   
       const errors = await validate(invalidMovie);
       expect(errors.length).toBeGreaterThan(0); // Should fail validation
@@ -315,7 +315,7 @@ describe('MovieService', () => {
       invalidMovie.genre = 'Sci-Fi';
       invalidMovie.duration = -148; // Invalid- Negative duration
       invalidMovie.rating = 8.8;
-      invalidMovie.release_year = 2010;
+      invalidMovie.releaseYear = 2010;
   
       const errors = await validate(invalidMovie);
       expect(errors.length).toBeGreaterThan(0); // Should fail validation
@@ -327,31 +327,31 @@ describe('MovieService', () => {
       invalidMovie.genre = 'Sci-Fi';
       invalidMovie.duration = 148;
       invalidMovie.rating = 11; // Invalid- Rating exceeds max value
-      invalidMovie.release_year = 2010;
+      invalidMovie.releaseYear = 2010;
   
       const errors = await validate(invalidMovie);
       expect(errors.length).toBeGreaterThan(0); // Should fail validation
       expect(errors[0].constraints.max).toBeDefined(); 
     });
   
-    it('should fail validation if release_year is too early', async () => {
+    it('should fail validation if releaseYear is too early', async () => {
       const invalidMovie = new UpdateMovieDto();
       invalidMovie.genre = 'Sci-Fi';
       invalidMovie.duration = 148;
       invalidMovie.rating = 8.8;
-      invalidMovie.release_year = 1887; // Invalid- Year before 1888
+      invalidMovie.releaseYear = 1887; // Invalid- Year before 1888
   
       const errors = await validate(invalidMovie);
       expect(errors.length).toBeGreaterThan(0); // Should fail validation
       expect(errors[0].constraints.min).toBeDefined(); 
     });
   
-    it('should fail validation if release_year is in the future', async () => {
+    it('should fail validation if releaseYear is in the future', async () => {
       const invalidMovie = new UpdateMovieDto();
       invalidMovie.genre = 'Sci-Fi';
       invalidMovie.duration = 148;
       invalidMovie.rating = 8.8;
-      invalidMovie.release_year = new Date().getFullYear() + 1; // Invalid- Year in the future
+      invalidMovie.releaseYear = new Date().getFullYear() + 1; // Invalid- Year in the future
   
       const errors = await validate(invalidMovie);
       expect(errors.length).toBeGreaterThan(0); // Should fail validation
