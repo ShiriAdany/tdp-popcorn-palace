@@ -3,7 +3,7 @@ import { IsString, IsInt, IsEnum, IsNumber, IsPositive, Min, Max, MinLength, Max
 export class CreateMovieDto {
   @IsString()
   @MinLength(1)
-  @MaxLength(100)
+  @MaxLength(255)
   title: string;
 
   @IsEnum([

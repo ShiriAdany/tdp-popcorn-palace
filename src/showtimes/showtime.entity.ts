@@ -1,12 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, BeforeInsert } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Movie } from '../movies/movie.entity'; 
 
 @Entity()
 export class Showtime {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  movie: string;
+  @ManyToOne(() => Movie, (movie) => movie.showtimes)
+  @JoinColumn({ name: 'movieID' })
+  movie: Movie;
 
   @Column()
   theater: string;
@@ -19,5 +21,4 @@ export class Showtime {
 
   @Column('decimal', { precision: 5, scale: 2 })
   price: number;
-
 }

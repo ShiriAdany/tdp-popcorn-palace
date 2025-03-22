@@ -1,4 +1,6 @@
-  import { Entity, PrimaryGeneratedColumn, Column,Unique } from 'typeorm';
+  import { Entity, PrimaryGeneratedColumn, Column,Unique, OneToMany } from 'typeorm';
+  import { Showtime } from '../showtimes/showtime.entity';
+
 
   @Entity()
   @Unique(['title'])  // Movie title is unique
@@ -20,4 +22,8 @@
 
     @Column()
     releaseYear: number;
+
+
+    @OneToMany(() => Showtime, (showtime) => showtime.movie)
+    showtimes: Showtime[];
   }
