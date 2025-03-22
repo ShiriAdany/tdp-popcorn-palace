@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MovieModule } from './movies/movie.module';
 import { Movie } from './movies/movie.entity';
+import { ShowtimeModule } from './showtimes/showtime.module';
+import { Showtime } from './showtimes/showtime.entity';
+ 
 
 @Module({
   imports: [
@@ -13,10 +16,11 @@ import { Movie } from './movies/movie.entity';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       autoLoadEntities: true,
-      synchronize: true,   // In development, set it to true, but disable in production!
-      entities: [Movie],
+      synchronize: true,   
+      entities: [Movie,Showtime],
     }),
     MovieModule,
+    ShowtimeModule
   ],
 })
 export class AppModule {}
