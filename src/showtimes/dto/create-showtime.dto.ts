@@ -1,14 +1,23 @@
-// create-showtime.dto.ts
-import { IsString, IsDateString, IsDecimal, Min, Max, IsInt } from 'class-validator';
+import { 
+  IsString, 
+  IsDateString, 
+  IsNumber, 
+  IsPositive, 
+  IsInt, 
+  Min, 
+  Length, 
+  IsNotEmpty
+} from 'class-validator';
 
 export class CreateShowtimeDto {
   @IsInt()
   @Min(1)
-  movie: number;
+  @IsPositive()
+  movieID: number;
 
   @IsString()
-  @Min(1)
-  @Max(255)
+  @IsNotEmpty()
+  @Length(1, 255)  
   theater: string;
 
   @IsDateString()
@@ -17,7 +26,7 @@ export class CreateShowtimeDto {
   @IsDateString()
   end_time: string;
 
-  @IsDecimal()
-  @Min(0)
+  @IsNumber()
+  @IsPositive()
   price: number;
 }

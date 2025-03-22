@@ -15,18 +15,15 @@ export class ShowtimeController {
   }
 
 
-//   @Post()
-//   async addShowtime(
-//     @Body() createShowtimeDto: CreateShowtimeDto,
-//     @Res() res: Response,
-//   ): Promise<void> {
-//     try {
-//       const showtime = await this.showtimeService.addShowtime(createShowtimeDto);
-//       res.status(HttpStatus.CREATED).json(showtime);
-//     } catch (error) {
-//       res.status(HttpStatus.NOT_FOUND).json({ message: error.message });
-//     }
-//   }
+  @Post()
+  async addShowtime(@Body() createShowtimeDto: CreateShowtimeDto, @Res() res: Response,): Promise<void> {
+    try {
+      const showtime = await this.showtimeService.addShowtime(createShowtimeDto);
+      res.status(HttpStatus.OK).json(showtime);
+    } catch (error) {
+      res.status(HttpStatus.NOT_FOUND).json({ message: error.message });
+    }
+  }
 
 
 

@@ -7,8 +7,8 @@ export class Showtime {
   id: number;
 
   @ManyToOne(() => Movie, (movie) => movie.showtimes)
-  @JoinColumn({ name: 'movieID' })
-  movie: Movie;
+  @JoinColumn({ name: 'movieID', referencedColumnName: 'id' })
+  movieID: Movie;
 
   @Column()
   theater: string;

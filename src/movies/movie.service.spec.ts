@@ -52,6 +52,7 @@ describe('MovieService', () => {
         duration: 81,
         rating: 8.3,
         releaseYear: 1995,
+        showtimes: []
       },
       {
         id: 2,
@@ -60,6 +61,7 @@ describe('MovieService', () => {
         duration: 195,
         rating: 7.8,
         releaseYear: 1997,
+        showtimes: []
       },
     ];
   
@@ -70,7 +72,7 @@ describe('MovieService', () => {
     expect(result).toEqual(movies);
   });
 
-  it('should throw ConflictException when movie with same title exists', async () => {
+  it('should throw ConflictException when movie with the same title exists', async () => {
     const existingMovie: Movie = {
       id: 1,
       title: 'Toy Story',
@@ -91,9 +93,13 @@ describe('MovieService', () => {
 
     jest.spyOn(repository, 'findOne').mockResolvedValue(existingMovie);
 
-    await expect(service.addMovie(newMovie)).rejects.toThrowError(new ConflictException('A movie with the title "Toy Story" already exists.'));
+    // Expect the ConflictException to be thrown
+    await expect(service.addMovie(newMovie)).rejects.toThrowError(
+      new ConflictException('A movie with the title "Toy Story" already exists.')
+    );
   });
 
+  
   it('should add a new movie when title is unique', async () => {
     const newMovie: Movie = {
       id: 2,
@@ -102,6 +108,7 @@ describe('MovieService', () => {
       releaseYear: 1994,
       duration: 88,
       rating: 8.5,
+      showtimes: []
     };
 
     jest.spyOn(repository, 'findOne').mockResolvedValue(null); 
@@ -142,7 +149,7 @@ describe('MovieService', () => {
 
     it('should fail validation if title is too long', async () => {
       const invalidMovie = new CreateMovieDto();
-      invalidMovie.title = 'A'.repeat(101); // Invalid: Title exceeds max length
+      invalidMovie.title = 'A'.repeat(256); // Invalid: Title exceeds max length
       invalidMovie.genre = 'Sci-Fi';
       invalidMovie.duration = 148;
       invalidMovie.rating = 8.8;
@@ -166,7 +173,7 @@ describe('MovieService', () => {
       expect(errors[0].constraints.isEnum).toBeDefined(); // Check for isEnum constraint
     });
 
-    it('should fail validation if duration is not a positive integer', async () => {
+    it('should fail validation if du  ration is not a positive integer', async () => {
       const invalidMovie = new CreateMovieDto();
       invalidMovie.title = 'Inception';
       invalidMovie.genre = 'Sci-Fi';

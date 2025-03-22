@@ -23,7 +23,6 @@
     @Column()
     releaseYear: number;
 
-
-    @OneToMany(() => Showtime, (showtime) => showtime.movie)
-    showtimes: Showtime[];
+    @OneToMany(() => Showtime, (showtime) => showtime.movieID,{ nullable: true })
+    showtimes?: Showtime[];
   }
