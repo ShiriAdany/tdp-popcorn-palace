@@ -7,6 +7,7 @@ import { Movie } from '../movies/movie.entity';
 import { CreateShowtimeDto } from './dto/create-showtime.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { validate } from 'class-validator';
+import { UpdateShowtimeDto } from './dto/update-showtime.dto';
 
 describe('ShowtimeService', () => {
   let service: ShowtimeService;
@@ -20,10 +21,18 @@ describe('ShowtimeService', () => {
         {
           provide: getRepositoryToken(Showtime),
           useClass: Repository,
+          useValue: {
+            findOne: jest.fn(),
+            save: jest.fn(),
+            find: jest.fn(),
+          }
         },
         {
           provide: getRepositoryToken(Movie),
           useClass: Repository,
+          useValue: {
+          findOne: jest.fn(),
+          }
         },
       ],
     }).compile();
@@ -58,8 +67,8 @@ describe('ShowtimeService', () => {
       const showtimeData: CreateShowtimeDto = {
         movieID: 1,
         theater: 'Sample Theater',
-        start_time: '2026-02-14T11:47:46.125405Z',
-        end_time: '2026-02-14T14:47:46.125405Z',
+        start_time: '2026-01-01T11:47:46.125405Z',
+        end_time: '2026-01-01T14:47:46.125405Z',
         price: 20.2,
       };
 
@@ -76,8 +85,8 @@ describe('ShowtimeService', () => {
       const showtimeData: CreateShowtimeDto = {
         movieID: 1,
         theater: 'Sample Theater',
-        start_time: '2026-02-14T11:47:46.125405Z',
-        end_time: '2026-02-14T14:47:46.125405Z',
+        start_time: '2026-01-01T11:47:46.125405Z',
+        end_time: '2026-01-01T14:47:46.125405Z',
         price: 20.2,
       };
 
@@ -93,8 +102,8 @@ describe('ShowtimeService', () => {
       const showtimeData: CreateShowtimeDto = {
         movieID: 1,
         theater: 'Sample Theater',
-        start_time: '2026-02-14T14:47:46.125405Z',
-        end_time: '2025-02-14T11:47:46.125405Z',
+        start_time: '2026-01-01T14:47:46.125405Z',
+        end_time: '2025-01-01T11:47:46.125405Z',
         price: 20.2,
       };
 
@@ -110,8 +119,8 @@ describe('ShowtimeService', () => {
       const showtimeData: CreateShowtimeDto = {
         movieID: 1,
         theater: 'Sample Theater',
-        start_time: '2020-02-14T11:47:46.125405Z',
-        end_time: '2025-02-14T14:47:46.125405Z',
+        start_time: '2020-01-01T11:47:46.125405Z',
+        end_time: '2025-01-01T14:47:46.125405Z',
         price: 20.2,
       };
 
@@ -127,8 +136,8 @@ describe('ShowtimeService', () => {
       const showtimeData: CreateShowtimeDto = {
         movieID: 1,
         theater: 'Sample Theater',
-        start_time: '2026-02-14T11:47:46.125405Z',
-        end_time: '2026-02-14T11:47:46.125405Z',
+        start_time: '2026-01-01T11:47:46.125405Z',
+        end_time: '2026-01-01T11:47:46.125405Z',
         price: 20.2,
       };
 
@@ -144,14 +153,14 @@ describe('ShowtimeService', () => {
       const showtimeData: CreateShowtimeDto = {
         movieID: 1,
         theater: 'Sample Theater',
-        start_time: '2026-02-14T11:47:46.125405Z',
-        end_time: '2026-02-14T14:47:46.125405Z',
+        start_time: '2026-01-01T11:47:46.125405Z',
+        end_time: '2026-01-01T14:47:46.125405Z',
         price: 20.2,
       };
 
       const existingShowtime = new Showtime();
-      existingShowtime.start_time = new Date('2026-02-14T10:47:46.125405Z');
-      existingShowtime.end_time = new Date('2026-02-14T12:47:46.125405Z');
+      existingShowtime.start_time = new Date('2026-01-01T10:47:46.125405Z');
+      existingShowtime.end_time = new Date('2026-01-01T12:47:46.125405Z');
 
       jest.spyOn(movieRepository, 'findOne').mockResolvedValue(movie);
       jest.spyOn(showtimeRepository, 'find').mockResolvedValue([existingShowtime]);
@@ -164,8 +173,8 @@ describe('ShowtimeService', () => {
       const showtimeData: CreateShowtimeDto = {
         movieID: -1, // Invalid movie ID
         theater: 'Sample Theater',
-        start_time: '2026-02-14T11:47:46.125405Z',
-        end_time: '2026-02-14T14:47:46.125405Z',
+        start_time: '2026-01-01T11:47:46.125405Z',
+        end_time: '2026-01-01T14:47:46.125405Z',
         price: 20.2,
       };
     
@@ -178,8 +187,8 @@ describe('ShowtimeService', () => {
       const showtimeData = {
         movieID: 'invalid', // Invalid movie ID format
         theater: 'Sample Theater',
-        start_time: '2026-02-14T11:47:46.125405Z',
-        end_time: '2026-02-14T14:47:46.125405Z',
+        start_time: '2026-01-01T11:47:46.125405Z',
+        end_time: '2026-01-01T14:47:46.125405Z',
         price: 20.2,
       };
     
@@ -191,8 +200,8 @@ describe('ShowtimeService', () => {
       const showtimeData = {
         // movieID is missing
         theater: 'Sample Theater',
-        start_time: '2026-02-14T11:47:46.125405Z',
-        end_time: '2026-02-14T14:47:46.125405Z',
+        start_time: '2026-01-01T11:47:46.125405Z',
+        end_time: '2026-01-01T14:47:46.125405Z',
         price: 20.2,
       };
     
@@ -205,8 +214,8 @@ describe('ShowtimeService', () => {
         const invalidShowtime = new CreateShowtimeDto();
         invalidShowtime.movieID = 1;
         invalidShowtime.theater = 'Sample Theater';
-        invalidShowtime.start_time = '2026-02-14T11:47:46.125405Z';
-        invalidShowtime.end_time = '2026-02-14T14:47:46.125405Z';
+        invalidShowtime.start_time = '2026-01-01T11:47:46.125405Z';
+        invalidShowtime.end_time = '2026-01-01T14:47:46.125405Z';
         invalidShowtime.price = -10.5; // Invalid: Negative price
     
         const errors = await validate(invalidShowtime);
@@ -218,8 +227,8 @@ describe('ShowtimeService', () => {
         const invalidShowtime = new CreateShowtimeDto();
         invalidShowtime.movieID = 1;
         invalidShowtime.theater = ''; // Invalid: Empty theater name
-        invalidShowtime.start_time = '2026-02-14T11:47:46.125405Z';
-        invalidShowtime.end_time = '2026-02-14T14:47:46.125405Z';
+        invalidShowtime.start_time = '2026-01-01T11:47:46.125405Z';
+        invalidShowtime.end_time = '2026-01-01T14:47:46.125405Z';
         invalidShowtime.price = 20.2;
     
         const errors = await validate(invalidShowtime);
@@ -231,8 +240,8 @@ describe('ShowtimeService', () => {
         const invalidShowtime = new CreateShowtimeDto();
         invalidShowtime.movieID = -1; // Invalid: Negative movie ID
         invalidShowtime.theater = 'Sample Theater';
-        invalidShowtime.start_time = '2026-02-14T11:47:46.125405Z';
-        invalidShowtime.end_time = '2026-02-14T14:47:46.125405Z';
+        invalidShowtime.start_time = '2026-01-01T11:47:46.125405Z';
+        invalidShowtime.end_time = '2026-01-01T14:47:46.125405Z';
         invalidShowtime.price = 20.2;
     
         const errors = await validate(invalidShowtime);
@@ -242,4 +251,200 @@ describe('ShowtimeService', () => {
     });
 
   });
+
+  describe('updateShowtime', () => {
+    it('should successfully update an existing showtime', async () => {
+      const showtimeId = 1;
+      const movie = new Movie();
+      movie.id = 1;
+
+      const existingShowtime = {
+        id: showtimeId,
+        movieID: movie,
+        start_time: new Date('2026-01-01T10:00:00.000Z'),
+        end_time: new Date('2026-01-01T12:00:00.000Z'),
+        theater: 'Sample Theater',
+        price: 50.2,
+      };
+
+      const updateDto: UpdateShowtimeDto = {
+        startTime: '2026-01-01T11:00:00.000Z',
+        endTime: '2026-01-01T13:00:00.000Z',
+        price: 60.0,
+      };
+
+      jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(existingShowtime);
+      jest.spyOn(showtimeRepository, 'find').mockResolvedValue([]);
+      jest.spyOn(showtimeRepository, 'save').mockResolvedValue({ ...existingShowtime, ...updateDto });
+
+      const result = await service.updateShowtime(showtimeId, updateDto);
+
+      expect(result).toEqual({
+        ...existingShowtime,
+        ...updateDto,
+      });
+      expect(showtimeRepository.save).toHaveBeenCalledWith(expect.objectContaining(updateDto));
+    });
+
+    it('should throw NotFoundException if the showtime does not exist', async () => {
+      const showtimeId = 999; // Non-existent showtime ID
+      const updateDto: UpdateShowtimeDto = { price: 60.0 };
+
+      jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(null); // Showtime does not exist
+
+      await expect(service.updateShowtime(showtimeId, updateDto)).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw BadRequestException if startTime is after endTime', async () => {
+      const showtimeId = 1;
+      const movie = new Movie();
+      movie.id = 1;
+
+      const existingShowtime = {
+        id: showtimeId,
+        movieID: movie,
+        start_time: new Date('2026-01-01T10:00:00.000Z'),
+        end_time: new Date('2026-01-01T12:00:00.000Z'),
+        theater: 'Sample Theater',
+        price:100,
+      };
+
+      const updateDto: UpdateShowtimeDto = {
+        startTime: '2026-01-01T14:00:00.000Z', // Invalid: after end time
+        endTime: '2026-01-01T13:00:00.000Z',
+      };
+
+      jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(existingShowtime);
+
+      await expect(service.updateShowtime(showtimeId, updateDto)).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw BadRequestException if the new showtime overlaps with an existing one', async () => {
+      const showtimeId = 1;
+      
+      const movie1 = new Movie();
+      movie1.id = 1;
+
+      const existingShowtime = {
+        id: showtimeId,
+        movieID: movie1,
+        start_time: new Date('2026-01-01T10:00:00.000Z'),
+        end_time: new Date('2026-01-01T12:00:00.000Z'),
+        theater: 'Sample Theater',
+        price: 70.7
+      };
+
+      const movie2 = new Movie();
+      movie2.id = 2;
+
+      const overlappingShowtime = {
+        id: 2, // Different ID to simulate overlapping showtime
+        movieID: movie2,
+        start_time: new Date('2026-01-01T11:00:00.000Z'),
+        end_time: new Date('2026-01-01T13:00:00.000Z'),
+        theater: 'Sample Theater',
+        price: 500
+      };
+
+      const updateDto: UpdateShowtimeDto = {
+        startTime: '2026-01-01T11:00:00.000Z', // Overlapping start time
+        endTime: '2026-01-01T13:00:00.000Z',
+      };
+
+      jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(existingShowtime);
+      jest.spyOn(showtimeRepository, 'find').mockResolvedValue([overlappingShowtime]); // Simulate overlapping showtime
+
+      await expect(service.updateShowtime(showtimeId, updateDto)).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw BadRequestException if start time is in the past', async () => {
+      const showtimeId = 1;
+      const movie1 = new Movie();
+      movie1.id = 1;
+
+      const existingShowtime = {
+        id: showtimeId,
+        movieID : movie1,
+        start_time: new Date('2026-01-01T10:00:00.000Z'),
+        end_time: new Date('2026-01-01T12:00:00.000Z'),
+        theater: 'Sample Theater',
+        price: 4.44
+      };
+
+      const updateDto: UpdateShowtimeDto = {
+        startTime: '2020-01-01T10:00:00.000Z', // Invalid: past date
+        endTime: '2025-01-01T12:00:00.000Z',
+      };
+
+      jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(existingShowtime);
+
+      await expect(service.updateShowtime(showtimeId, updateDto)).rejects.toThrow(BadRequestException);
+    });
+
+    it('should update only the price without changing the times', async () => {
+      const showtimeId = 1;
+      const movie1 = new Movie();
+      movie1.id = 1;
+
+      const existingShowtime = {
+        id: showtimeId,
+        movieID: movie1,
+        start_time: new Date('2026-01-01T10:00:00.000Z'),
+        end_time: new Date('2026-01-01T12:00:00.000Z'),
+        theater: 'Sample Theater',
+        price: 50.2,
+      };
+
+      const updateDto: UpdateShowtimeDto = {
+        price: 60.0,
+      };
+
+      jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(existingShowtime);
+      jest.spyOn(showtimeRepository, 'save').mockResolvedValue({ ...existingShowtime, ...updateDto });
+
+      const result = await service.updateShowtime(showtimeId, updateDto);
+
+      expect(result.price).toEqual(updateDto.price);
+      expect(result.start_time).toEqual(existingShowtime.start_time);
+      expect(result.end_time).toEqual(existingShowtime.end_time);
+    });
+  });
+
+
+  it('should delete a showtime successfully', async () => {
+    const showtimeId = 1;
+    const showtimeEntity = new Showtime();
+    showtimeEntity.id = showtimeId;
+    showtimeEntity.start_time = new Date();
+    showtimeEntity.end_time = new Date();
+    showtimeEntity.theater = 'Sample Theater';
+    showtimeEntity.price = 50;
+
+    jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(showtimeEntity);
+    jest.spyOn(showtimeRepository, 'delete').mockResolvedValue({affected: 1, raw: {} });
+
+    await service.deleteShowtime(showtimeId);
+    expect(showtimeRepository.delete).toHaveBeenCalledWith(showtimeId);
+  });
+
+  it('should throw NotFoundException if showtime not found', async () => {
+    const showtimeId = 1;
+
+    jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(null);
+
+    await expect(service.deleteShowtime(showtimeId)).rejects.toThrow(
+      new NotFoundException(`Showtime with ID ${showtimeId} not found`),
+    );
+  });
+
+  it('should handle deletion failure', async () => {
+    const showtimeId = 1;
+
+    jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue({ id: showtimeId } as Showtime);
+    jest.spyOn(showtimeRepository, 'delete').mockResolvedValue({ affected: 1, raw: {} });
+
+    await expect(service.deleteShowtime(showtimeId)).resolves.toBeUndefined();
+  });
+  
+
 });
