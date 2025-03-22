@@ -1,19 +1,19 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Showtime } from './showtime.entity';
+import { Movie } from '../movies/movie.entity';
 import { CreateShowtimeDto } from './dto/create-showtime.dto';
-import { Movie } from '../movies/movie.entity'; 
 import { UpdateShowtimeDto } from './dto/update-showtime.dto';
 
 @Injectable()
 export class ShowtimeService {
   constructor(
     @InjectRepository(Showtime)
-    private readonly showtimeRepository: Repository<Showtime>,
+    private showtimeRepository: Repository<Showtime>,
 
     @InjectRepository(Movie)
-    private readonly movieRepository: Repository<Movie>,
+    private movieRepository: Repository<Movie>, // Inject MovieRepository
   ) {}
 
   // Get a showtime by ID
