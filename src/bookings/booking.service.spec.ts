@@ -83,22 +83,26 @@ describe('BookingService', () => {
     it('should throw ConflictException if seat is already booked', async () => {
       const showtimeId = 1;
       const seatNumber = 5;
-      const userId = 'user-uuid';
-
+      const userId = '84438967-f68f-4fa0-b620-0f08217e76af';
+    
       const showtime = new Showtime();
       showtime.id = showtimeId;
-
+    
       const existingBooking = new Booking();
       existingBooking.showtimeId = showtimeId;
       existingBooking.seatNumber = seatNumber;
       existingBooking.userId = userId;
-
+      existingBooking.showtime = showtime; // Ensure the showtime relationship is included
+    
       const newBooking: CreateBookingDto = { showtimeId, seatNumber, userId };
-
-      // Mock repository methods
+    
+      // Mock showtimeRepository to return a valid showtime
       jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(showtime);
-      jest.spyOn(bookingRepository, 'findOne').mockResolvedValue(existingBooking); // Seat already booked
-
+    
+      // Mock bookingRepository to return an existing booking (seat already booked)
+      jest.spyOn(bookingRepository, 'findOne').mockResolvedValue(existingBooking);
+    
+      // Try to book the same seat and expect ConflictException
       await expect(service.bookTicket(newBooking))
         .rejects
         .toThrow(ConflictException);
@@ -106,5 +110,6 @@ describe('BookingService', () => {
         .rejects
         .toThrow(`Seat number ${seatNumber} is already booked for this showtime`);
     });
+        
   });
 });
