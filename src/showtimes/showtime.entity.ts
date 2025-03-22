@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Movie } from '../movies/movie.entity'; 
+import { Booking } from '../bookings/booking.entity';
 
 @Entity()
 export class Showtime {
@@ -21,4 +22,9 @@ export class Showtime {
 
   @Column('decimal', { precision: 5, scale: 2 })
   price: number;
+
+  // One-to-many relationship with Booking
+  @OneToMany(() => Booking, (booking) => booking.showtime,{ nullable: true })
+  bookings?: Booking[];
+  
 }

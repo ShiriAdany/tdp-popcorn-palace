@@ -4,6 +4,7 @@ import { MovieModule } from './movies/movie.module';
 import { Movie } from './movies/movie.entity';
 import { ShowtimeModule } from './showtimes/showtime.module';
 import { Showtime } from './showtimes/showtime.entity';
+import { BookingModule } from './bookings/booking.module';
  
 
 @Module({
@@ -20,7 +21,8 @@ import { Showtime } from './showtimes/showtime.entity';
       entities: [Movie,Showtime],
     }),
     MovieModule,
-    ShowtimeModule
+    ShowtimeModule,
+    BookingModule
   ],
 })
 export class AppModule {}
