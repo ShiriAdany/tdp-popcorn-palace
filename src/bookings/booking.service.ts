@@ -16,24 +16,27 @@ export class BookingService {
   ) {}
 
   //book a (available) ticket- given showtime ID ,seat number, and user ID
-  async bookTicket(newBooking: CreateBookingDto): Promise<Booking> {
-    const { showtimeId, seatNumber, userId } = newBooking;
+  // Example with Pessimistic Locking
 
+async bookTicket(newBooking: CreateBookingDto): Promise<Booking> {
+    const { showtimeId, seatNumber, userId } = newBooking;
+  
     // Check if showtime exists
     const showtime = await this.showtimeRepository.findOne({ where: { id: showtimeId } });
     if (!showtime) {
       throw new NotFoundException(`Showtime with ID ${showtimeId} not found`);
     }
-
-    // Check if the seat is already booked for this showtime
-    const existingBooking = await this.bookingRepository.findOne({ 
-      where: { showtimeId, seatNumber }
+  
+    // Lock the row for this seat to ensure no other transaction can modify it
+    const existingBooking = await this.bookingRepository.findOne({
+      where: { showtimeId, seatNumber },
+      lock: { mode: 'pessimistic_write' },  // Pessimistic lock
     });
-
+  
     if (existingBooking) {
       throw new ConflictException(`Seat number ${seatNumber} is already booked for this showtime`);
     }
-
+  
     // Create and save the new booking
     const booking = this.bookingRepository.create({
       showtimeId,
@@ -43,4 +46,5 @@ export class BookingService {
     });
     return this.bookingRepository.save(booking);
   }
+  
 }

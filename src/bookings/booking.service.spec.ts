@@ -43,12 +43,12 @@ describe('BookingService', () => {
       const showtimeId = 1;
       const seatNumber = 15;
       const userId = '84438967-f68f-4fa0-b620-0f08217e76af';
-      
+
       const showtime = new Showtime();
       showtime.id = showtimeId;
 
       const newBooking: CreateBookingDto = { showtimeId, seatNumber, userId };
-      const savedBooking = { id: 1, ...newBooking, showtime };  // Ensure showtime is included
+      const savedBooking = { id: 1, ...newBooking, showtime }; // Ensure showtime is included
 
       // Mock repository methods
       jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(showtime);
@@ -60,7 +60,10 @@ describe('BookingService', () => {
 
       expect(result).toEqual(savedBooking);
       expect(showtimeRepository.findOne).toHaveBeenCalledWith({ where: { id: showtimeId } });
-      expect(bookingRepository.findOne).toHaveBeenCalledWith({ where: { showtimeId, seatNumber } });
+      expect(bookingRepository.findOne).toHaveBeenCalledWith({
+        where: { showtimeId, seatNumber },
+        lock: { mode: 'pessimistic_write' }, // Include the lock option
+      });
       expect(bookingRepository.create).toHaveBeenCalledWith({ ...newBooking, showtime });
       expect(bookingRepository.save).toHaveBeenCalledWith(savedBooking);
     });
@@ -84,24 +87,24 @@ describe('BookingService', () => {
       const showtimeId = 1;
       const seatNumber = 5;
       const userId = '84438967-f68f-4fa0-b620-0f08217e76af';
-    
+
       const showtime = new Showtime();
       showtime.id = showtimeId;
-    
+
       const existingBooking = new Booking();
       existingBooking.showtimeId = showtimeId;
       existingBooking.seatNumber = seatNumber;
       existingBooking.userId = userId;
       existingBooking.showtime = showtime; // Ensure the showtime relationship is included
-    
+
       const newBooking: CreateBookingDto = { showtimeId, seatNumber, userId };
-    
+
       // Mock showtimeRepository to return a valid showtime
       jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(showtime);
-    
+
       // Mock bookingRepository to return an existing booking (seat already booked)
       jest.spyOn(bookingRepository, 'findOne').mockResolvedValue(existingBooking);
-    
+
       // Try to book the same seat and expect ConflictException
       await expect(service.bookTicket(newBooking))
         .rejects
@@ -110,6 +113,36 @@ describe('BookingService', () => {
         .rejects
         .toThrow(`Seat number ${seatNumber} is already booked for this showtime`);
     });
-        
+
+    it('should prevent double-booking with pessimistic locking', async () => {
+      const showtimeId = 1;
+      const seatNumber = 5;
+      const userId = '84438967-f68f-4fa0-b620-0f08217e76af';
+    
+      const showtime = new Showtime();
+      showtime.id = showtimeId;
+    
+      const newBooking: CreateBookingDto = { showtimeId, seatNumber, userId };
+    
+      // Mock showtimeRepository to return a valid showtime
+      jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(showtime);
+    
+      // Mock bookingRepository to simulate no existing booking initially
+      jest.spyOn(bookingRepository, 'findOne')
+        .mockResolvedValueOnce(null) // First call: seat is available
+        .mockResolvedValueOnce({ id: 1, ...newBooking, showtime }); // Second call: seat is already booked
+    
+      // Mock bookingRepository.save to simulate a successful booking
+      const savedBooking = { id: 1, ...newBooking, showtime };
+      jest.spyOn(bookingRepository, 'save').mockResolvedValue(savedBooking);
+    
+      // Simulate two concurrent booking attempts
+      const booking1 = service.bookTicket(newBooking);
+      const booking2 = service.bookTicket(newBooking);
+    
+      // Ensure only one booking succeeds
+      await expect(booking1).resolves.toEqual(savedBooking);
+      await expect(booking2).rejects.toThrow(ConflictException);
+    });
   });
 });
