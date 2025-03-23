@@ -5,9 +5,10 @@ Welcome to Popcorn Palace! It's your go-to place for booking movie tickets, wher
 1. [Prerequisites](#prerequisites)
 2. [Installation](#installation)
 3. [Setting Up Database](#setting-up-database)
-4. [Running the Application](#running-the-application)
-5. [Testing](#testing)
-6. [Termination](#terminating-the-application-and-docker-container)
+4. [Creating the .env File](#creating-the-env-file)
+5. [Running the Application](#running-the-application)
+6. [Testing](#testing)
+7. [Termination](#terminating-the-application-and-docker-container)
 
 
 ---
@@ -69,7 +70,12 @@ This project uses PostgreSQL for database management. To run it locally, you can
 docker-compose up -d
 ```
 
+## Creating the .env File
+To ensure proper configuration, you need to create a .env file in the root of the project. This file contains necessary environment variables for the application to function properly (such as database credentials and other configuration settings).
 
+- Create a new file named .env in the root directory of your project.
+
+- Check the .env.example file in the repository for the structure.
 ## Running the Application
 Once everything is set up, you can run the application:
 
