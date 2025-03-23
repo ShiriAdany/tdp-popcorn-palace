@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, HttpStatus, Res, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, HttpStatus, Res, NotFoundException, ConflictException } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { Movie } from './movie.entity';
 import { CreateMovieDto } from './dto/create-movie.dto';  
@@ -26,8 +26,12 @@ export class MovieController {
       return res.status(HttpStatus.OK).json(movie);
       
     } catch (error) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: 'Error adding movie',error: error.message,});
+      const status = error.status || HttpStatus.INTERNAL_SERVER_ERROR;
+      return res.status(status).json({
+        message: error.message || 'Unexpected error',
+      });
     }
+    
   }
   
 
@@ -40,13 +44,10 @@ export class MovieController {
       return res.status(HttpStatus.OK).json({message: `Movie '${title}' updated successfully`,});
       
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        return res.status(HttpStatus.NOT_FOUND).json({
-          message: `Movie with title '${title}' not found`,
-        });
-      }
-
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({message: 'Error updating movie',error: error.message,});
+      const status = error.status || HttpStatus.INTERNAL_SERVER_ERROR;
+      return res.status(status).json({
+        message: error.message || 'Unexpected error',
+      });
     }
   }
 

@@ -20,12 +20,15 @@ export class ShowtimeController {
 
     // HTTP POST endpoint to add a showtime
     @Post()
-    async addShowtime(@Body() createShowtimeDto: CreateShowtimeDto, @Res() res: Response,): Promise<void> {
+    async addShowtime(@Body() createShowtimeDto: CreateShowtimeDto, @Res() res: Response,){
         try {
         const showtime = await this.showtimeService.addShowtime(createShowtimeDto);
-        res.status(HttpStatus.OK).json(showtime);
+        return res.status(HttpStatus.OK).json(showtime);
         } catch (error) {
-        res.status(HttpStatus.NOT_FOUND).json({ message: error.message });
+          const status = error.status || HttpStatus.INTERNAL_SERVER_ERROR;
+          res.status(status).json({
+          message: error.message || 'Unexpected error',
+           });
         }
     }
 
@@ -36,7 +39,10 @@ export class ShowtimeController {
             const showtime = await this.showtimeService.updateShowtime(showtimeId, updateData)
             res.status(HttpStatus.OK).json(showtime)
         } catch(error){
-            res.status(HttpStatus.NOT_FOUND).json({ message: error.message });
+          const status = error.status || HttpStatus.INTERNAL_SERVER_ERROR;
+          res.status(status).json({
+          message: error.message || 'Unexpected error',
+           });
         }
     }
 
@@ -49,7 +55,10 @@ export class ShowtimeController {
       await this.showtimeService.deleteShowtime(showtimeId);
       res.status(HttpStatus.OK).send({ message: 'Showtime deleted successfully' }); 
     } catch (error) {
-      res.status(HttpStatus.NOT_FOUND).json({ message: error.message }); 
+      const status = error.status || HttpStatus.INTERNAL_SERVER_ERROR;
+          res.status(status).json({
+          message: error.message || 'Unexpected error',
+           });
     }
   }
 

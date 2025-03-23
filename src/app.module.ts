@@ -5,6 +5,9 @@ import { Movie } from './movies/movie.entity';
 import { ShowtimeModule } from './showtimes/showtime.module';
 import { Showtime } from './showtimes/showtime.entity';
 import { BookingModule } from './bookings/booking.module';
+import { AppController } from './app.controller';  
+import { AppService } from './app.service';  
+
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -26,5 +29,7 @@ dotenv.config();
     ShowtimeModule,
     BookingModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

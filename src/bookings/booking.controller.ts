@@ -13,7 +13,7 @@ export class BookingController {
   async bookTicket(@Body() createBookingDto: CreateBookingDto, @Res() res: Response): Promise<void> {
     try {
       const booking = await this.bookingService.bookTicket(createBookingDto);
-      res.status(HttpStatus.CREATED).json(booking);  
+      res.status(HttpStatus.OK).json(booking);  
     } catch (error) {
       res.status(error.status || HttpStatus.INTERNAL_SERVER_ERROR).json({
         message: error.message || 'An error occurred while booking the ticket',

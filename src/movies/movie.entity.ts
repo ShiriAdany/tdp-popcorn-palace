@@ -17,7 +17,8 @@
     @Column()
     duration: number; // In minutes
 
-    @Column('decimal', { precision: 3, scale: 1 })
+    //@Column('decimal', { precision: 3, scale: 1 })
+    @Column('float')
     rating: number;
 
     @Column()

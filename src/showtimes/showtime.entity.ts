@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
-import { Movie } from '../movies/movie.entity'; 
+import { Movie } from '../movies/movie.entity';
 import { Booking } from '../bookings/booking.entity';
+import { Transform } from 'class-transformer';
 
 @Entity()
 export class Showtime {
@@ -14,17 +15,17 @@ export class Showtime {
   @Column()
   theater: string;
 
-  @Column('timestamp')
+  @Column('timestamp', { precision: 6 })
   start_time: Date;
 
-  @Column('timestamp')
+  @Column('timestamp', { precision: 6 }) 
   end_time: Date;
 
-  @Column('decimal', { precision: 5, scale: 2 })
+  @Column('float')
   price: number;
 
   // One-to-many relationship with Booking
-  @OneToMany(() => Booking, (booking) => booking.showtime,{ nullable: true })
+  @OneToMany(() => Booking, (booking) => booking.showtime, { nullable: true })
   bookings?: Booking[];
-  
+
 }
