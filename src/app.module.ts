@@ -9,6 +9,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';  
 
 import * as dotenv from 'dotenv';
+import { Booking } from './bookings/booking.entity';
 
 dotenv.config();
 
@@ -23,7 +24,7 @@ dotenv.config();
       database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
       synchronize: true,
-      entities: [Movie, Showtime],
+      entities: [Movie, Showtime,Booking],
     }),
     MovieModule,
     ShowtimeModule,

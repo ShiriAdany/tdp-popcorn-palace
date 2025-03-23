@@ -1,5 +1,6 @@
 # Popcorn Palace - Movie Ticket Booking System
 
+Welcome to Popcorn Palace! It's your go-to place for booking movie tickets, where you can easily grab a seat and enjoy the show.
 ## Table of Contents
 1. [Prerequisites](#prerequisites)
 2. [Installation](#installation)
@@ -119,6 +120,31 @@ To run tests for your application, follow these steps:
 npm run test
 ```
 
+- **Run End-to-End (e2e) tests:**
+
+You need to run each test individually, as they depend on each other.
+
+
+**available tests:**
+
+- movie.e2e-spec.ts
+- showtime.e2e-spec.ts
+- booking.e2e-spec.ts
+
+**To run a specific test, use the following command:**
+
+```bash
+npm run tests:e2e -- <path_to_test_file>
+```
+
+For example, to run the movie test:
+
+
+```bash
+npm run tests:e2e -- test/movie.e2e-spec.ts
+```
+
+
 ## Terminating the Application and Docker Container
 To stop the **Popcorn Palace** backend and the PostgreSQL container, follow these steps:
 
@@ -142,4 +168,7 @@ docker-compose down
 docker-compose stop
 ```
 
+--- 
+
+That’s a wrap! Now you’re all set to enjoy your movies without the hassle. Grab your popcorn, book your seat, and let the show begin! 🍿🎬
 

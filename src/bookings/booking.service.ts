@@ -10,10 +10,10 @@ import { Transaction, EntityManager } from 'typeorm';
 export class BookingService {
   constructor(
     @InjectRepository(Booking)
-    private bookingRepository: Repository<Booking>,
+    private readonly bookingRepository: Repository<Booking>,
 
     @InjectRepository(Showtime)
-    private showtimeRepository: Repository<Showtime>, // Inject ShowtimeRepository
+    private readonly showtimeRepository: Repository<Showtime>, 
   ) {}
 
   //book a (available) ticket- given showtime ID, seat number, and user ID
