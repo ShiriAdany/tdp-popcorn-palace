@@ -28,7 +28,17 @@ export class MovieService {
     if (existingMovie) {
       throw new ConflictException(`A movie with the title "${movieData.title}" already exists.`);
     }
-    return this.movieRepository.save(movieData);
+    const new_movie= await this.movieRepository.save(movieData);
+    const return_movie= {
+      id : new_movie.id,
+      title: new_movie.title,
+      genre: new_movie.genre,
+      duration: new_movie.duration,
+      rating: new_movie.rating,
+      releaseYear: new_movie.releaseYear
+
+    }
+    return return_movie
   }
 
   // Update a movie

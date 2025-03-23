@@ -36,7 +36,18 @@ describe('MovieController (e2e)', () => {
   });
 
   it('should return all movies', async () => {
+    const createMovieDto: CreateMovieDto = {
+      title: 'movie1',
+      genre: 'Sci-Fi',
+      duration: 120,
+      rating: 8.8,
+      releaseYear: 2010,
+    };
+
+    await request(app.getHttpServer()).post('/movies').send(createMovieDto).expect(200);
+    
     const response = await request(app.getHttpServer()).get('/movies/all').expect(200);
+    console.log("all movies: ",response.body)
     expect(response.body).toBeInstanceOf(Array);
   });
 
@@ -50,7 +61,7 @@ describe('MovieController (e2e)', () => {
     };
 
     const response = await request(app.getHttpServer()).post('/movies').send(createMovieDto).expect(200);
-
+    console.log("add movie: ", response.body)
     expect(response.body).toHaveProperty('id');
     expect(response.body.title).toEqual(createMovieDto.title);
     expect(response.body.genre).toEqual(createMovieDto.genre);

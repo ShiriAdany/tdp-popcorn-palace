@@ -71,23 +71,22 @@ describe('ShowtimeController (e2e)', () => {
       end_time: '2026-01-01T14:47:46.125405Z',
     };
   
-  
     // Create a showtime
     const createdShowtime = await request(app.getHttpServer())
       .post('/showtimes')
       .send(createShowtimeDto)
       .expect(200);
-  
-  
+
+    //console.log("created time!!! : ", createdShowtime.body.startTime)
     const showtimeId = createdShowtime.body.id;
-  
+    //console.log("created!!! : ", showtimeId.body)
     // Fetch the showtime by ID
     const response = await request(app.getHttpServer())
       .get(`/showtimes/${showtimeId}`)
       .expect(200);
-    //console.log(response.body)
+    console.log(response.body)
   
-      expect(response.body).toHaveProperty('id');
+    expect(response.body).toHaveProperty('id');
   });
 
   // Test: Add a showtime
@@ -115,8 +114,9 @@ describe('ShowtimeController (e2e)', () => {
       .post('/showtimes')
       .send(createShowtimeDto)
       .expect(200);
+    console.log(response.body)
 
-      expect(response.body).toHaveProperty('id');
+    expect(response.body).toHaveProperty('id');
 
   });
 
@@ -162,6 +162,8 @@ describe('ShowtimeController (e2e)', () => {
     const updatedShowtime = await request(app.getHttpServer())
       .get(`/showtimes/${showtimeId}`)
       .expect(200);
+    //console.log(updatedShowtime.body)
+
 
     expect(updatedShowtime.body).toMatchObject({
       id: showtimeId,

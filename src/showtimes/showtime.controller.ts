@@ -4,6 +4,7 @@ import { ShowtimeService } from './showtime.service';
 import { Showtime } from './showtime.entity';
 import { CreateShowtimeDto } from './dto/create-showtime.dto';
 import { UpdateShowtimeDto } from './dto/update-showtime.dto';
+import { ResponseShowtime } from './dto/return-showtime.dto';
 
 
 
@@ -13,7 +14,7 @@ export class ShowtimeController {
 
     // HTTP GET endpoint to get a showtime by id
     @Get(':id')
-    async getShowtimeById(@Param('id') id: number): Promise<Showtime> {
+    async getShowtimeById(@Param('id') id: number): Promise<ResponseShowtime> {
         return this.showtimeService.getShowtimeById(id);
     }
 
@@ -23,6 +24,7 @@ export class ShowtimeController {
     async addShowtime(@Body() createShowtimeDto: CreateShowtimeDto, @Res() res: Response,){
         try {
         const showtime = await this.showtimeService.addShowtime(createShowtimeDto);
+        //console.log("in add showtime: ", showtime)
         return res.status(HttpStatus.OK).json(showtime);
         } catch (error) {
           const status = error.status || HttpStatus.INTERNAL_SERVER_ERROR;

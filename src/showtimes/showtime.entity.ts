@@ -12,17 +12,17 @@ export class Showtime {
   price: number;
 
   @ManyToOne(() => Movie, (movie) => movie.showtimes)
-  @JoinColumn({ name: 'movieID', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'movieId', referencedColumnName: 'id' })
   movieID: Movie;
 
   @Column()
   theater: string;
 
-  @Column('timestamp', { precision: 6 })
-  start_time: Date;
+  @Column()
+  startTime: string;
 
-  @Column('timestamp', { precision: 6 }) 
-  end_time: Date;
+  @Column() 
+  endTime: string;
 
 
 
@@ -30,7 +30,7 @@ export class Showtime {
   @OneToMany(() => Booking, (booking) => booking.showtime, { nullable: true })
   bookings?: Booking[];
 
-  @Expose()
+  @Expose({ name: 'movieID' })
   @Transform(({ value }) => value.id)  
   get movieId(): number {
     return this.movieID ? this.movieID.id : null;

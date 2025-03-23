@@ -5,6 +5,7 @@ import { Showtime } from './showtime.entity';
 import { Movie } from '../movies/movie.entity';
 import { CreateShowtimeDto } from './dto/create-showtime.dto';
 import { UpdateShowtimeDto } from './dto/update-showtime.dto';
+import { ResponseShowtime } from './dto/return-showtime.dto';
 
 @Injectable()
 export class ShowtimeService {
@@ -17,20 +18,30 @@ export class ShowtimeService {
   ) {}
 
   // Get a showtime by ID
-  async getShowtimeById(id: number): Promise<Showtime> {
-    const showtime = await this.showtimeRepository.findOne({ where: { id } });
-    console.log(showtime)
-
+  async getShowtimeById(id: number): Promise<ResponseShowtime> {
+    //console.log("given id: " , id)
+    const showtime = await this.showtimeRepository.findOne({ where: { id },relations: ['movieID'] });
+    //console.log("in service: ", showtime)
     if (!showtime) {
       throw new NotFoundException(`Showtime with ID ${id} not found`);
     }
+    const returnData:ResponseShowtime = {
+      id: showtime.id,
+      price: showtime.price,
+      movieId: showtime.movieID.id,
+      theater: showtime.theater,
+      startTime: showtime.startTime,
+      endTime: showtime.endTime
+    }
+    //console.log(returnData)
 
-    return showtime;
+
+    return  returnData ;
   }
 
   private async validateShowtimeTimes(start_time: string, end_time: string, theater: string, excludeShowtimeId?: number) {
-    const startTime = new Date(start_time).getTime(); // Convert to timestamp
-    const endTime = new Date(end_time).getTime(); // Convert to timestamp
+    const startTime = new Date(start_time).getTime(); 
+    const endTime = new Date(end_time).getTime(); 
   
     if (startTime > endTime) {
       throw new BadRequestException('Start time cannot be after end time');
@@ -52,8 +63,8 @@ export class ShowtimeService {
         continue; // Skip the current showtime if updating
       }
   
-      const existingStartTime = new Date(existingShowtime.start_time).getTime();
-      const existingEndTime = new Date(existingShowtime.end_time).getTime();
+      const existingStartTime = new Date(existingShowtime.startTime).getTime()
+      const existingEndTime = new Date(existingShowtime.endTime).getTime()
   
       if (
         (startTime >= existingStartTime && startTime < existingEndTime) ||
@@ -69,9 +80,9 @@ export class ShowtimeService {
 
 
 
-  async addShowtime(showtimeData: CreateShowtimeDto): Promise<Showtime> {
+  async addShowtime(showtimeData: CreateShowtimeDto): Promise<ResponseShowtime> {
     const { movieID, start_time, end_time, theater, ...rest } = showtimeData;
-  
+    //console.log("given start time : ", start_time)
     // Check if the movie exists
     const movieEntity = await this.movieRepository.findOne({ where: { id: movieID } });
     if (!movieEntity) {
@@ -83,13 +94,23 @@ export class ShowtimeService {
     // Create the showtime with the movie entity
     const showtime = this.showtimeRepository.create({
       ...rest,
-      start_time: startTime, // Use the original string
-      end_time: endTime, // Use the original string
+      startTime: startTime, // Use the original string
+      endTime: endTime, // Use the original string
       theater,
       movieID: movieEntity,
     });
+    //console.log("in add showtime: ", showtime)
+    const new_showtime = await this.showtimeRepository.save(showtime);
     
-    return this.showtimeRepository.save(showtime);
+    const returnData:ResponseShowtime = {
+      id: new_showtime.id,
+      price: new_showtime.price,
+      movieId: new_showtime.movieID.id,
+      theater: new_showtime.theater,
+      startTime: new_showtime.startTime,
+      endTime: new_showtime.endTime
+    }
+    return returnData
   }
 
   
@@ -106,8 +127,8 @@ export class ShowtimeService {
     // Validate times if startTime or endTime is being updated
     if (startTime || endTime) {
         const { startTime: validatedStartTime, endTime: validatedEndTime } = await this.validateShowtimeTimes(
-            startTime || showtime.start_time.toISOString(),
-            endTime || showtime.end_time.toISOString(),
+            startTime || showtime.startTime,
+            endTime || showtime.endTime,
             theater || showtime.theater,
             showtimeId
         );
