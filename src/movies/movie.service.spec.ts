@@ -108,7 +108,7 @@ describe('MovieService', () => {
       releaseYear: 1994,
       duration: 88,
       rating: 8.5,
-      showtimes: []
+      //showtimes: []
     };
 
     jest.spyOn(repository, 'findOne').mockResolvedValue(null); 

@@ -30,10 +30,10 @@ export class Showtime {
   @OneToMany(() => Booking, (booking) => booking.showtime, { nullable: true })
   bookings?: Booking[];
 
-  @Expose({ name: 'movieID' })
-  @Transform(({ value }) => value.id)  
-  get movieId(): number {
-    return this.movieID ? this.movieID.id : null;
-  }
+  // @Expose({ name: 'movieID' })
+  // @Transform(({ value }) => value.id)  
+  // get movieId(): number {
+  //   return this.movieID ? this.movieID.id : null;
+  // }
 
 }
