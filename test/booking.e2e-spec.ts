@@ -91,8 +91,10 @@ async function createMovieAndShowtime(app: any) {
       })
       .expect(200);
 
-    expect(response.body).toHaveProperty('id');
-    expect(response.body.id).toBeDefined();
+    //console.log(response.body)
+    expect(response.body).toHaveProperty('bookingId');
+    expect(response.body.bookingId).toBeDefined();
+
   });
 
 
@@ -135,8 +137,8 @@ async function createMovieAndShowtime(app: any) {
       })
       .expect(200);
 
-    expect(first_booking.body).toHaveProperty('id');
-    expect(first_booking.body.id).toBeDefined();
+    expect(first_booking.body).toHaveProperty('bookingId');
+    expect(first_booking.body.bookingId).toBeDefined();
 
 
     const new_booking = await request(app.getHttpServer())

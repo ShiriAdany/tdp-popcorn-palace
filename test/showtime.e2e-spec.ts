@@ -60,7 +60,7 @@ describe('ShowtimeController (e2e)', () => {
       releaseYear: 2001,
     });
   
-    console.log('Created Movie:', movie); // Log the created movie
+    //console.log('Created Movie:', movie); // Log the created movie
   
     // Use the created movie's ID
     const createShowtimeDto: CreateShowtimeDto = {
@@ -85,6 +85,7 @@ describe('ShowtimeController (e2e)', () => {
     const response = await request(app.getHttpServer())
       .get(`/showtimes/${showtimeId}`)
       .expect(200);
+    //console.log(response.body)
   
       expect(response.body).toHaveProperty('id');
   });

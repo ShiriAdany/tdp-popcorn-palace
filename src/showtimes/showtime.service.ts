@@ -19,6 +19,7 @@ export class ShowtimeService {
   // Get a showtime by ID
   async getShowtimeById(id: number): Promise<Showtime> {
     const showtime = await this.showtimeRepository.findOne({ where: { id } });
+    console.log(showtime)
 
     if (!showtime) {
       throw new NotFoundException(`Showtime with ID ${id} not found`);

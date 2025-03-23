@@ -3,8 +3,8 @@ import { Showtime } from '../showtimes/showtime.entity';
 
 @Entity()
 export class Booking {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')  
+  bookingId: string;  
 
   @Column()
   showtimeId: number;
