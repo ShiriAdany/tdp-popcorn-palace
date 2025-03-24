@@ -103,7 +103,6 @@ export class ShowtimeService {
     });
     //console.log("in add showtime: ", showtime)
     const new_showtime = await this.showtimeRepository.save(showtime);
-    
     const returnData:ResponseShowtime = {
       id: new_showtime.id,
       price: new_showtime.price,

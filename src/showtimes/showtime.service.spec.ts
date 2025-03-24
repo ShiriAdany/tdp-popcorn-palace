@@ -44,27 +44,53 @@ describe('ShowtimeService', () => {
 
   describe('getShowtimeById', () => {
     it('should return a showtime if found', async () => {
+      // Step 1: Create a mock movie
       const movie = new Movie();
-      movie.id = 1;
-      const showtime:Showtime ={
-        id: 1,
-        price:10,
-        movieID: movie,
-        theater:"blabla",
-        startTime: '2026-01-01T11:47:46.125405Z',
-        endTime: '2026-01-01T14:47:46.125405Z',
-      } 
-      
-      jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(showtime);
+      movie.id = 5;
+      movie.title = "Test Movie";
+    
+      jest.spyOn(movieRepository, 'findOne').mockResolvedValue(movie);
+      const createshowtime: CreateShowtimeDto = {
+        price: 10,
+        movieID: 5,
+        theater: "blabla",
+        start_time: '2026-01-01T11:47:46.125405Z',
+        end_time: '2026-01-01T14:47:46.125405Z',
+      };
 
+      const showtimeEntity = {
+        id: 1, 
+        price: createshowtime.price,
+        movieID: movie, 
+        theater: createshowtime.theater,
+        startTime: createshowtime.start_time,
+        endTime: createshowtime.end_time,
+      };
+    
+      
+      jest.spyOn(movieRepository, 'findOne').mockResolvedValue(movie);
+      jest.spyOn(showtimeRepository, 'find').mockResolvedValue([]);
+      jest.spyOn(showtimeRepository, 'create').mockReturnValue(createshowtime as any);
+      jest.spyOn(showtimeRepository, 'save').mockResolvedValue(createshowtime as any);
+      await service.addShowtime(createshowtime);
+      jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(showtimeEntity);
       const result = await service.getShowtimeById(1);
-      //console.log(result)
-      //expect(result).toEqual(showtime);
+
+      expect(result).toEqual({
+        id: showtimeEntity.id,
+        price: showtimeEntity.price,
+        movieId: showtimeEntity.movieID.id, 
+        theater: showtimeEntity.theater,
+        startTime: showtimeEntity.startTime,
+        endTime: showtimeEntity.endTime,
+      });
     });
+    
+  
+  
 
     it('should throw NotFoundException if showtime is not found', async () => {
       jest.spyOn(showtimeRepository, 'findOne').mockResolvedValue(null);
-
       await expect(service.getShowtimeById(1)).rejects.toThrow(NotFoundException);
     });
   });
@@ -194,31 +220,19 @@ describe('ShowtimeService', () => {
       await expect(service.addShowtime(showtimeData)).rejects.toThrow('Movie with ID -1 not found');
     });
 
-    // it('should throw an error if movie ID is not a valid number', async () => {
-    //   const showtimeData = {
-    //     movieID: 'invalid', // Invalid movie ID format
-    //     theater: 'Sample Theater',
-    //     start_time: '2026-01-01T11:47:46.125405Z',
-    //     end_time: '2026-01-01T14:47:46.125405Z',
-    //     price: 20.2,
-    //   };
-    
-    //   // Expect the service to throw a BadRequestException or similar
-    //   await expect(service.addShowtime(showtimeData)).rejects.toThrow();
-    // });
 
-    // it('should throw an error if movie ID is missing', async () => {
-    //   const showtimeData = {
-    //     // movieID is missing
-    //     theater: 'Sample Theater',
-    //     start_time: '2026-01-01T11:47:46.125405Z',
-    //     end_time: '2026-01-01T14:47:46.125405Z',
-    //     price: 20.2,
-    //   };
+    it('should throw an error if movie ID is missing', async () => {
+      const showtimeData = {
+        // movieID is missing
+        theater: 'Sample Theater',
+        start_time: '2026-01-01T11:47:46.125405Z',
+        end_time: '2026-01-01T14:47:46.125405Z',
+        price: 20.2,
+      };
     
-    //   // Expect the service to throw a BadRequestException or similar
-    //   await expect(service.addShowtime(showtimeData as any)).rejects.toThrow();
-    // });
+    // Expect the service to throw a BadRequestException 
+      await expect(service.addShowtime(showtimeData as any)).rejects.toThrow();
+    });
 
     describe('CreateShowtimeDto Validation', () => {
       it('should fail validation if price is not a positive number', async () => {
