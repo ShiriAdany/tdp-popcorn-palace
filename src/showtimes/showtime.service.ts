@@ -39,6 +39,7 @@ export class ShowtimeService {
     return  returnData ;
   }
 
+  //validates the times - not overlapping, start in the past, or start after the end
   private async validateShowtimeTimes(start_time: string, end_time: string, theater: string, excludeShowtimeId?: number) {
     const startTime = new Date(start_time).getTime(); 
     const endTime = new Date(end_time).getTime(); 
@@ -80,6 +81,7 @@ export class ShowtimeService {
 
 
 
+  //add a showtime 
   async addShowtime(showtimeData: CreateShowtimeDto): Promise<ResponseShowtime> {
     const { movieID, start_time, end_time, theater, ...rest } = showtimeData;
     //console.log("given start time : ", start_time)

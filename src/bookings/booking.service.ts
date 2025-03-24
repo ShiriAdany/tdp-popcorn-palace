@@ -16,7 +16,8 @@ export class BookingService {
     private readonly showtimeRepository: Repository<Showtime>, 
   ) {}
 
-  //book a (available) ticket- given showtime ID, seat number, and user ID
+  //book a ticket- given showtime ID, seat number, and user ID
+  //verifies the seat is available
   async bookTicket(newBooking: CreateBookingDto): Promise<Booking> {
     const { showtimeId, seatNumber, userId } = newBooking;
     return await this.bookingRepository.manager.transaction(async (transactionalEntityManager) => {
